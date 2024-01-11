@@ -2,6 +2,8 @@ pipeline {
     agent any
     environment {
         APP_NAME = "test app name"
+        IMAGE_NAME = "ghcr.io/ruthw-ssi/springboot"
+        TEST = "555555"
     }
     stages {
         stage('Build Image'){
@@ -10,7 +12,6 @@ pipeline {
             }
         }
         stage('Build Stage (Docker)'){
-            // agent label สำหรับ run เครื่องคนอื่น
             agent {label 'build-server'}
             steps {
                 sh "docker build -t ghcr.io/ruthw-ssi/springboot ."
@@ -24,11 +25,22 @@ pipeline {
                     credentialsId: 'ruthw',
                     passwordVariable: 'githubPassword',
                     usernameVariable: 'githubUser'
-                )]
-            ){
-                sh "docker login ghcr.io -u ${env.githubUser} -p ${env.githubPassword}"
-                sh "docker push ghcr.io/ruthw-ssi/springboot"
+                )])
+                {
+                    sh "docker login ghcr.io -u ${env.githubUser} -p ${env.githubPassword}"
+                    sh "docker tag ${env.IMAGE_NAME} ${env.IMAGE_NAME}:${env.BUILD_NUMBER}"
+                    sh "docker push ${env.IMAGE_NAME}"
+                    sh "docker push ${env.IMAGE_NAME}:${env.BUILD_NUMBER}"
+                    sh "docker rmi ${env.IMAGE_NAME}"
+                    sh "docker rmi ${env.IMAGE_NAME}:${env.BUILD_NUMBER}"
+                    // sh "docker push ghcr.io/ruthw-ssi/springboot"
+                }
             }
+        }
+        stage('Deploy Stage (K8s)') {
+            agent {label 'deploy-server'}
+            steps {
+                sh "kubectl apply -f"
             }
         }
     }
