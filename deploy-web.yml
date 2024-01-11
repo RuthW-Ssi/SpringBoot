@@ -13,7 +13,7 @@ spec:
         app: springboot
     spec:
       containers:
-        - name: devops_learning-server
+        - name: springboot
           image: ghcr.io/ruthw-ssi/springboot
           ports:
             - containerPort: 80
