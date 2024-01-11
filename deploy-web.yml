@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: devops_learning
+  name: springboot
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: devops_learning
+      app: springboot
   template:
     metadata:
       labels:
-        app: devops_learning
+        app: springboot
     spec:
       containers:
         - name: devops_learning-server
-          image: ghcr.io/machdees/devops_learning
+          image: ghcr.io/ruthw-ssi/springboot
           ports:
             - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: helloworld
+  name: springboot-service
   labels:
-    app: hello-world
+    app: springboot-service
 spec:
   selector:
-    app: hello-world
+    app: springboot
   ports:
     - name: http
       protocol: TCP
