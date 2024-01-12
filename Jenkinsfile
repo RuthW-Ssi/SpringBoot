@@ -40,10 +40,12 @@ pipeline {
         stage('Deploy Stage (K8s)') {
             agent {label 'deploy-server'}
             script {
-                    try {
-                            sh "kubectl delete -f deploy-web.yml" 
-                        } catch (e){}
-                    sh "kubectl apply -f deploy-web.yml"   
+                try {
+                        sh "kubectl delete -f deploy-web.yml" 
+                    } catch (e){
+                        "echo cannot delete"
+                    }
+                sh "kubectl apply -f deploy-web.yml"
             }
         }
     }
