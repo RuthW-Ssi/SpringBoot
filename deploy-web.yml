@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user01RW
+  name: user01-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: user01RW
+      app: user01-service
   template:
     metadata:
       labels:
-        app: user01RW
+        app: user01-service
     spec:
       containers:
         - name: springboot
@@ -21,12 +21,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: user01RW
+  name: user01-service
   labels:
-    app: user01RW
+    app: user01-service
 spec:
   selector:
-    app: user01RW
+    app: user01-service
   ports:
     - name: http
       protocol: TCP
