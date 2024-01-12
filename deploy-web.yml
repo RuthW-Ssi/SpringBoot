@@ -15,6 +15,7 @@ spec:
       containers:
         - name: springboot
           image: ghcr.io/ruthw-ssi/springboot
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
 ---
